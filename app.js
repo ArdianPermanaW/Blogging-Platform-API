@@ -7,14 +7,14 @@ const postRoutes = require('./src/routes/postRoutes');
 const app = express();
 app.use(bodyParser.json());
 
-// Connect to database
-connectDB();
+connectDB();// Connect to database
+app.use('/posts', postRoutes); // Routes
 
-// Routes
-app.use('/posts', postRoutes);
-
-// local testing
 const PORT = 8080;
 app.listen(PORT, () => {
     console.log(`Server running on http://localhost:${PORT}`);
 });
+
+
+
+

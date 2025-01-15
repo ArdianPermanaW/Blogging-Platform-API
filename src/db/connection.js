@@ -1,26 +1,18 @@
-const { MongoClient, ServerApiVersion } = require('mongodb');
+const mongoose = require('mongoose');
 require('dotenv').config();
 
-const connectDB = async () => {
-    const uri = process.env.MONGO_URI;
-    if (!uri) {
-        throw new Error("MongoDB URI is not defined in the .env file.");
-    }
-    
-    const client = new MongoClient(uri, {
-        serverApi: {
-            version: ServerApiVersion.v1,
-            strict: true,
-            deprecationErrors: true,
-        }
-    });
-      
+async function connectDB() {
     try {
-        // Connect the client to the server	
-        await client.connect();
-        console.log("Connected to MongoDB Atlas!");
-    } catch(error) {
-        console.error("Error connection to mongoDB Atlas:", error);
+         // Connect to MongoDB Atlas using the connection string from .env
+        await mongoose.connect(process.env.MONGO_URI, {
+            useNewUrlParser: true,
+            useUnifiedTopology: true,
+        });
+        console.log('MongoDB Connected');
+    } catch (error) {
+        console.error(error.message);
+        process.exit(1);
     }
-};
+}
+
 module.exports = connectDB;

@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const Post = require('../models/post');
+const connectDB = require('../db/connection');
 
 // Get all posts
 router.get('/', async (req, res) => {
@@ -12,15 +13,24 @@ router.get('/', async (req, res) => {
 
 // C is for Create
 router.post('/', async (req, res) => {
-    const post = new Post(req.body);
-    await post.save();
-    res.status(201).json(post);
+    try {
+        const { title, content } = req.body;
+        const newPost = new Post({ title, content });
+        await newPost.save();
+        res.status(201).json(newPost);
+    } catch (err) {
+        res.status(500).json({ error: 'Server Error' });
+    }
 });
 
 // R is for Read... get? all post
 router.get('/', async (req, res) => {
-    const posts = await Post.find();
-    res.json(posts);
+    try {
+        const posts = await Post.find();
+        res.status(200).json(posts);
+    } catch (err) {
+        res.status(500).json({ error: 'Server Error' });
+    }
 });
 
 // Another? R is for Read... get? post by id 
